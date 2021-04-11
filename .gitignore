@@ -1,0 +1,18 @@
+# Local work folder that is not checked in
+_LOCAL/
+
+# Eclipse
+.factorypath
+.project
+.settings/
+**/.*.md.html
+
+# Visual Studio Code
+.vscode
+
+# OSX
+.DS_Store
+
+# Vim
+*.swo
+*.swp
