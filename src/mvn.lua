@@ -8,42 +8,21 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local function starts_with(str, prefix)
-  return str:sub(1, string.len(prefix)) == prefix
-end
+local suggest = require("suggest")
+local suggest_xmls = suggest.files_with(".xml")
 
-local function ends_with(str, suffix)
-  return str:sub(-string.len(suffix)) == suffix
-end
-
-local function get_dirs_or_files_with(match_word, suffix)
-  local matches = clink.filematches(match_word)
-  local matches_filtered = {}
-  for index, entry in ipairs(matches) do
-    if starts_with(entry.type, "dir") or ends_with(entry.match, suffix) then
-      table.insert(matches_filtered, entry)
-    end
-  end
-  return matches_filtered
-end
-
-local suggest_nothing = clink.argmatcher():nofiles()
-local suggest_files = clink.argmatcher():addarg(clink.filematches)
-local suggest_xmls = clink.argmatcher():addarg(function(m) return get_dirs_or_files_with(m, ".xml") end)
-
-
-local maven_flags = {
+local flags = {
   "-am", "--also-make",
   "-amd", "--also-make-dependents",
   "-B", "--batch-mode",
-  "-b"..suggest_nothing, "--builder"..suggest_nothing,
+  "-b"..suggest.nothing, "--builder"..suggest.nothing,
   "-C", "--strict-checksums",
   "-c", "--lax-checksums",
   "-cpu", "--check-plugin-updates",
-  "--define"..suggest_nothing, -- "-D"
+  "--define"..suggest.nothing, -- "-D"
   "-e", "--errors",
-  "-emp"..suggest_nothing, "--encrypt-master-password"..suggest_nothing,
-  "-ep"..suggest_nothing, "--encrypt-password"..suggest_nothing,
+  "-emp"..suggest.nothing, "--encrypt-master-password"..suggest.nothing,
+  "-ep"..suggest.nothing, "--encrypt-password"..suggest.nothing,
   "-f"..suggest_xmls, "--file"..suggest_xmls,
   "-fae", "--fail-at-end",
   "-ff", "--fail-fast",
@@ -51,7 +30,7 @@ local maven_flags = {
   "-gs"..suggest_xmls, "--global-settings"..suggest_xmls,
   "-gt"..suggest_xmls, "--global-toolchains"..suggest_xmls,
   "-h", "--help",
-  "-l"..suggest_files, "--log-file"..suggest_files,
+  "-l"..suggest.files, "--log-file"..suggest.files,
   "-llr", "--legacy-local-repository",
   "-N", "--non-recursive",
   "-npr", "--no-plugin-registry",
@@ -59,13 +38,13 @@ local maven_flags = {
   "-nsu", "--no-snapshot-updates",
   "-ntp", "--no-transfer-progress",
   "-o", "--offline",
-  "-P"..suggest_nothing, "--activate-profiles"..suggest_nothing,
-  "-pl"..suggest_nothing, "--projects"..suggest_nothing,
-  "-rf"..suggest_nothing, "--resume-from"..suggest_nothing,
+  "-P"..suggest.nothing, "--activate-profiles"..suggest.nothing,
+  "-pl"..suggest.nothing, "--projects"..suggest.nothing,
+  "-rf"..suggest.nothing, "--resume-from"..suggest.nothing,
   "-q", "--quiet",
   "-s"..suggest_xmls, "--settings"..suggest_xmls,
   "-t"..suggest_xmls, "--toolchains"..suggest_xmls,
-  "--threads"..suggest_nothing, -- "-T"
+  "--threads"..suggest.nothing, -- "-T"
   "-U", "--update-snapshots",
   "-up", "--update-plugins",
   "-v", "--version",
@@ -142,7 +121,7 @@ end
 
 
 clink.argmatcher("mvn")
-  :setclassifier(colorize_maven_goals)
-  :addflags(maven_flags)
+  :addflags(flags)
   :addarg(maven_goals)
+  :setclassifier(colorize_maven_goals)
   :loop(1)
