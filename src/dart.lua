@@ -9,7 +9,6 @@
 ]]--
 
 local strings = require("strings")
-local suggest = require("suggest")
 local sys = require("sys")
 
 local function extract_commands_from_help(help_command, marker)

@@ -69,7 +69,7 @@ local flags = {
   "--enable-preview"
 }
 
-local jvm_flags2 = {
+local flags2 = {
   "-jar"..suggest_jars,
   "-m"..suggest.nothing,
   "--module"..suggest.nothing,
@@ -77,5 +77,6 @@ local jvm_flags2 = {
 
 
 clink.argmatcher("java")
-  :addflags(jvm_flags)
-  :addflags(jvm_flags2)
+  :addflags(flags)
+  :addflags(flags2)
+

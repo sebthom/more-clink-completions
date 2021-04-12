@@ -8,7 +8,6 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local strings = require("strings")
 local suggest = require("suggest")
 local sys = require("sys")
 
