@@ -11,8 +11,9 @@ This repository contains Windows command line auto-completion functions to be us
 
 Currently completions for the following commands are available:
 - [docker.lua](src/docker.lua) for `docker` command - the Docker command line client
-- [java.lua](src/java.lua) for `java` command - Java Runtime
-- [javac.lua](src/javac.lua) for `javac` command - Java Compiler
+- [haxe.lua](src/haxe.lua) for `haxe` command - [Haxe compiler](https://haxe.org/manual/compiler-usage.html)
+- [java.lua](src/java.lua) for `java` command - Java runtime
+- [javac.lua](src/javac.lua) for `javac` command - Java compiler
 - [mvn.lua](src/mvn.lua) for `mvn` command - Apache Maven build tool
 
 You need other completions? Try https://github.com/vladimir-kotikov/clink-completions
