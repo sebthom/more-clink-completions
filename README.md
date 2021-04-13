@@ -20,6 +20,7 @@ Currently completions for the following commands are available:
 - [java.lua](src/java.lua) for `java` command - [Java](https://www.oracle.com/java/technologies/javase-downloads.html) runtime
 - [javac.lua](src/javac.lua) for `javac` command - [Java](https://docs.oracle.com/en/java/javase/index.html) compiler
 - [mvn.lua](src/mvn.lua) for `mvn` command - [Apache Maven](https://maven.apache.org) build tool
+- [openssl.lua](src/openssl.lua) for `openssl` command - [OpenSSL](https://github.com/openssl/openssl) command line tool
 
 You need other completions? Try https://github.com/vladimir-kotikov/clink-completions
 
