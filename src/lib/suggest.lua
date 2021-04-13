@@ -20,7 +20,7 @@ exports.files_with = function(suffix)
   return exports.from(function(match_word)
     local matches = clink.filematches(match_word)
     local matches_filtered = {}
-    for index, entry in ipairs(matches) do
+    for _,entry in ipairs(matches) do
       if strings.starts_with(entry.type, "dir") or strings.ends_with(entry.match, suffix) then
         table.insert(matches_filtered, entry)
       end

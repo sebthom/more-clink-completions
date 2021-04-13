@@ -11,6 +11,7 @@
 local suggest = require("suggest")
 local suggest_jars = suggest.files_with(".jar")
 
+
 local jvm_flags = {
   -- @<filename>
   -- -Akey[=value]
@@ -85,6 +86,7 @@ local jvm_flags = {
 
   "-Werror"
 }
+
 
 clink.argmatcher("javac")
   :addflags(jvm_flags)

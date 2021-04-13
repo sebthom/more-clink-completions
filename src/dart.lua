@@ -9,14 +9,15 @@
 ]]--
 
 local strings = require("strings")
-local suggest = require("suggest")
 local sys = require("sys")
+local tables = require("tables")
+
 
 local function extract_commands_from_help(help_command, marker)
   local commands = {}
   local is_command_definition = false
 
-  for i,line in ipairs(sys.exec(help_command)) do
+  for _,line in ipairs(sys.exec(help_command)) do
     if is_command_definition then
       local command = strings.trim(line):match("^[a-zA-Z-_]+")
 
@@ -40,10 +41,10 @@ end
 
 local commands_cache = {}
 
-local function dart_main_commands(word, word_index, line_state)
-  if commands_cache[""] == nil then
+local function main_commands(word, word_index, line_state)
+  if tables.misses_key(commands_cache, "") then
     local commands = extract_commands_from_help("dart --help", "Available commands:")
-    if next(commands) == nil then
+    if tables.is_empty(commands) then
       return nil
     end
     commands_cache[""] = commands
@@ -51,11 +52,12 @@ local function dart_main_commands(word, word_index, line_state)
   return commands_cache[""]
 end
 
-local function dart_sub_commands(word, word_index, line_state)
+
+local function sub_commands(word, word_index, line_state)
   local main_command = line_state:getword(word_index -1)
-  if commands_cache[main_command] == nil then
+  if tables.misses_key(commands_cache, main_command) then
     local commands = extract_commands_from_help("dart "..main_command.." --help", "Available subcommands:")
-    if next(commands) == nil then
+    if tables.is_empty(commands) then
       return nil
     end
     commands_cache[main_command] = commands
@@ -79,5 +81,5 @@ local flags = {
 
 clink.argmatcher("dart")
   :addflags(flags)
-  :addarg(dart_main_commands)
-  :addarg(dart_sub_commands)
+  :addarg(main_commands)
+  :addarg(sub_commands)

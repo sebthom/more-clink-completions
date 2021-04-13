@@ -11,27 +11,23 @@
 local strings = require("strings")
 local suggest = require("suggest")
 local sys = require("sys")
+local tables = require("tables")
 
 
 local function extract_commands_from_help(help_command)
   local commands = {}
   local is_command_definition = false
 
-  for i,line in ipairs(sys.exec(help_command)) do
-    if is_command_definition then
+  for _,line in ipairs(sys.exec(help_command)) do
+    if string.match(line, "Commands:") then
+      is_command_definition = true
+    elseif string.match(line, "Run 'docker") then
+      is_command_definition = false
+    elseif is_command_definition then
       local command = strings.trim(line):match("^(%S+) ")
-
       if not strings.is_empty(command) then
         table.insert(commands, command)
       end
-    end
-
-    if string.match(line, "Commands:") then
-      is_command_definition = true
-    end
-
-    if string.match(line, "Run 'docker") then
-      is_command_definition = false
     end
   end
 
@@ -41,10 +37,10 @@ end
 
 local commands_cache = {}
 
-local function docker_main_commands(word, word_index, line_state)
-  if commands_cache[""] == nil then
+local function main_commands(word, word_index, line_state)
+  if tables.misses_key(commands_cache, "") then
     local commands = extract_commands_from_help("docker --help")
-    if next(commands) == nil then
+    if tables.is_empty(commands) then
       return nil
     end
     commands_cache[""] = commands
@@ -53,11 +49,11 @@ local function docker_main_commands(word, word_index, line_state)
 end
 
 
-local function docker_sub_commands(word, word_index, line_state)
+local function sub_commands(word, word_index, line_state)
   local main_command = line_state:getword(word_index -1)
-  if commands_cache[main_command] == nil then
+  if tables.misses_key(commands_cache, main_command) then
     local commands = extract_commands_from_help("docker "..main_command.." --help")
-    if next(commands) == nil then
+    if tables.is_empty(commands) then
       return nil
     end
     commands_cache[main_command] = commands
@@ -95,5 +91,5 @@ local flags = {
 
 clink.argmatcher("docker")
   :addflags(flags)
-  :addarg(docker_main_commands)
-  :addarg(docker_sub_commands)
+  :addarg(main_commands)
+  :addarg(sub_commands)

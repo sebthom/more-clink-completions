@@ -10,6 +10,8 @@
 
 local suggest = require("suggest")
 local suggest_xmls = suggest.files_with(".xml")
+local tables = require("tables")
+
 
 local flags = {
   "-am", "--also-make",
@@ -114,7 +116,7 @@ local function colorize_maven_goals(arg_index, word, word_index, line_state, cla
   -- see https://chrisant996.github.io/clink/clink.html#word_classifications
   -- see https://github.com/chrisant996/clink/blob/e28c70fe2018ddfd5998bda4a587fb13825ca5b9/clink/app/scripts/self.lua#L221
 
-  if maven_goals[word] ~= nil then
+  if tables.contains_key(maven_goals, word) then
     classifications:classifyword(word_index, "a")
   end
 end

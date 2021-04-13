@@ -1,0 +1,43 @@
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+name: Build
+
+on:
+  push:
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+  pull_request:
+  workflow_dispatch:
+    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - lua_version: 5.2
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2 #https://github.com/actions/checkout
+
+    - name: Install lua ${{ matrix.lua_version }}
+      run: |
+        # https://github.com/luarocks/hererocks
+        pip install hererocks
+        hererocks .lua --lua ${{ matrix.lua_version }} -rlatest
+        source .lua/bin/activate
+        luarocks install luacheck || luarocks install luacheck
+
+    - name: Check syntax
+      run: |
+        source .lua/bin/activate
+        luac -l -l -p src/*.lua src/lib/*.lua | grep ".lua:"
+
+    - name: Check style
+      run: |
+        # https://luacheck.readthedocs.io/en/stable/cli.html
+        source .lua/bin/activate
+        luacheck src

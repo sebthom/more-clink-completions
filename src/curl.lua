@@ -12,8 +12,9 @@ local strings = require("strings")
 local suggest = require("suggest")
 local sys = require("sys")
 
+
 local flags = {}
-for i,line in ipairs(sys.exec("curl --help")) do
+for _,line in ipairs(sys.exec("curl --help")) do
   if line:match("^%s+-") then
     local short_flag = strings.trim(line:match("%s%-[a-zA-Z0-9]"))
     local long_flag = line:match("%-%-[a-zA-Z0-9-_]+")

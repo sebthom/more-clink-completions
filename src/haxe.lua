@@ -8,15 +8,15 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local strings = require("strings")
 local suggest = require("suggest")
 local sys = require("sys")
+local tables = require("tables")
 
 
 local suggest_haxe_defines_cache = {}
 local suggest_haxe_defines = suggest.from(function(match_word)
-  if next(suggest_haxe_defines_cache) == nil then
-    for i,line in ipairs(sys.exec("haxe --help-defines")) do
+  if tables.is_empty(suggest_haxe_defines_cache) then
+    for _,line in ipairs(sys.exec("haxe --help-defines")) do
       if line:match("%s[a-zA-Z-_]+%s+:") then
         local define=line:match("[a-zA-Z-_]+")
         table.insert(suggest_haxe_defines_cache, define)
