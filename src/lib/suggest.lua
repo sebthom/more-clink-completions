@@ -16,13 +16,16 @@ exports.dirs = clink.argmatcher():addarg(clink.dirmatches)
 
 exports.files = clink.argmatcher():addarg(clink.filematches)
 
-exports.files_with = function(suffix)
+exports.files_with = function(...)
+  local suffixes = table.pack(...)
   return exports.from(function(match_word)
     local matches = clink.filematches(match_word)
     local matches_filtered = {}
     for _,entry in ipairs(matches) do
-      if strings.starts_with(entry.type, "dir") or strings.ends_with(entry.match, suffix) then
-        table.insert(matches_filtered, entry)
+      for _,suffix in ipairs(suffixes) do
+        if strings.starts_with(entry.type, "dir") or strings.ends_with(entry.match, suffix) then
+          table.insert(matches_filtered, entry)
+        end
       end
     end
     return matches_filtered
