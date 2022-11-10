@@ -8,9 +8,9 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local suggest = require("suggest")
-local sys = require("sys")
-local tables = require("tables")
+local suggest = require("mcc.suggest")
+local sys = require("mcc.sys")
+local tables = require("mcc.tables")
 
 
 local suggest_haxe_defines_cache = {}

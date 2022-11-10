@@ -34,7 +34,7 @@ jobs:
     - name: Check syntax
       run: |
         source .lua/bin/activate
-        luac -l -l -p src/*.lua src/lib/*.lua | grep ".lua:"
+        luac -l -l -p src/*.lua src/lib/mcc/*.lua | grep ".lua:"
 
     - name: Check style
       run: |

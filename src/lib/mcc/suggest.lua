@@ -4,7 +4,7 @@
   SPDX-ArtifactOfProjectHomePage: https://github.com/sebthom/more-clink-completions
 ]]--
 
-local strings = require("strings")
+local strings = require("mcc.strings")
 
 local exports = {}
 

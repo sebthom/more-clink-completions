@@ -8,9 +8,9 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local strings = require("strings")
-local sys = require("sys")
-local tables = require("tables")
+local strings = require("mcc.strings")
+local sys = require("mcc.sys")
+local tables = require("mcc.tables")
 
 
 local function extract_commands_from_help(help_command, marker)

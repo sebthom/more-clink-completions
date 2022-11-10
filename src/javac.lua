@@ -8,7 +8,7 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local suggest = require("suggest")
+local suggest = require("mcc.suggest")
 local suggest_jars = suggest.files_with(".jar")
 
 

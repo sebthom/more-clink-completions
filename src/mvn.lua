@@ -8,9 +8,9 @@
   See https://chrisant996.github.io/clink/clink.html#extending-clink for clink API.
 ]]--
 
-local suggest = require("suggest")
+local suggest = require("mcc.suggest")
 local suggest_xmls = suggest.files_with(".xml")
-local tables = require("tables")
+local tables = require("mcc.tables")
 
 
 local flags = {
