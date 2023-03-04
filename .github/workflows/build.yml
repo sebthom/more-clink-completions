@@ -1,0 +1,216 @@
+# SPDX-FileCopyrightText: © Vegard IT GmbH (https://vegardit.com) and contributors
+# SPDX-FileContributor: Sebastian Thomschke
+# SPDX-License-Identifier: MIT
+# SPDX-ArtifactOfProjectHomePage: https://github.com/vegardit/haxe-clink-externs
+#
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+name: Build
+
+on:
+  push:
+    branches:    # build all branches
+    - '**'
+    tags-ignore: # but don't build tags
+    - '**'
+    paths-ignore:
+    - '**/*.adoc'
+    - '**/*.md'
+    - '.editorconfig'
+    - '.git*'
+    - '.github/*.yml'
+    - 'tools'
+  pull_request:
+  workflow_dispatch:
+    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+    inputs:
+      debug-with-ssh:
+        description: "Start an SSH session for debugging purposes after tests ran:"
+        default: never
+        type: choice
+        options: [ always, on_failure, on_failure_or_cancelled, never ]
+      debug-with-ssh-only-for-actor:
+        description: "Limit access to the SSH session to the GitHub user that triggered the job."
+        default: true
+        type: boolean
+      debug-with-ssh-only-jobs-matching:
+        description: "Only start an SSH session for jobs matching this regex pattern:"
+        default: ".*"
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RELEASE_BRANCH: v2
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-latest
+          haxe: nightly
+          may_create_release: false
+        - os: ubuntu-latest
+          haxe: latest
+          may_create_release: true
+    steps:
+    - name: Show environment variables
+      run: env | sort
+
+    - name: Git Checkout
+      uses: actions/checkout@v3 #https://github.com/actions/checkout
+
+    - name: "Install: Haxe and Haxelibs"
+      uses: vegardit/haxe-reusable-workflows/.github/actions/setup-haxe@dev
+      with:
+        haxe-reusable-workflows-version: dev
+        haxe-version: ${{ matrix.haxe }}
+        haxe-libs: no-spoon clink-externs@git:https://github.com/vegardit/haxe-clink-externs
+
+    - name: "Run: Haxe compile"
+      run: |
+        set -eux
+        haxe build.hxml
+
+    - name: "Install: Lua"
+      id: setup-haxe-targets
+      uses: vegardit/haxe-reusable-workflows/.github/actions/setup-haxe-targets@dev
+      with:
+        haxe-reusable-workflows-version: dev
+        setup-lua: 5.2
+
+    - name: "Run: Lua minify"
+      run: |
+        set -eux
+        lua tools/luapack-*/luapack.lua target/more-clink-completions.lua
+
+        # Add version info
+        git_log=$(git log ${{ github.ref_name }} --pretty=format:"%H%d %aI %s" -1)
+        prefix="-- $git_log
+        -- SPDX-FileCopyrightText: © Sebastian Thomschke and contributors
+        -- SPDX-License-Identifier: MIT
+        -- SPDX-ArtifactOfProjectHomePage: https://github.com/sebthom/more-clink-completions"
+
+        (echo "$prefix"; cat target/more-clink-completions.lua) > target/more-clink-completions.debug.lua
+        (echo "$prefix"; cat target/more-clink-completions.packed.lua) > target/more-clink-completions.lua
+
+    - name: Deploy release branch
+      if: ${{ matrix.may_create_release && github.ref_name == env.RELEASE_BRANCH && !env.ACT }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -eux
+
+        last_commit_message=$(git log --pretty=format:"%s (%h)" -1)
+        release_branch="${GITHUB_REF_NAME}-releases"
+        github_repo_url="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+
+        cd /tmp
+        if curl --output /dev/null -sf --head "$github_repo_url/tree/$release_branch"; then
+          git clone $github_repo_url --single-branch --branch "$release_branch" releasebranch
+          cd releasebranch
+          # https://github.community/t/github-actions-bot-email-address/17204
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git reset --hard HEAD^
+        else
+          git clone $github_repo_url releasebranch
+          cd releasebranch
+          git checkout --orphan "$release_branch"
+          git rm -rf .
+          cat <<EOF > README.md
+        # more-clink-completions ${GITHUB_REF_NAME} release repo
+
+        Please consult https://github.com/sebthom/more-clink-completions for more information.
+        EOF
+          git add README.md
+          cp "$GITHUB_WORKSPACE/LICENSE.txt" .
+          git add LICENSE.txt
+          # https://github.community/t/github-actions-bot-email-address/17204
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Initialize branch"
+        fi
+
+        cp "$GITHUB_WORKSPACE/target/more-clink-completions.lua" .
+        # check if file is new or modified
+        if ! git ls-files --error-unmatch more-clink-completions.lua &>/dev/null || ! git diff --quiet --exit-code more-clink-completions.lua; then
+          git add more-clink-completions.lua
+          git commit -m "$last_commit_message"
+          git push origin "$release_branch" --force
+        fi
+
+    - name: "Delete previous 'latest-${{ env.RELEASE_BRANCH }}' release"
+      if: ${{ matrix.may_create_release && github.ref_name == env.RELEASE_BRANCH && !env.ACT }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: latest-${{ env.RELEASE_BRANCH }} 
+      run: |
+        set -eu
+
+        function gh_api() {
+          (set -x; curl -H "Authorization: token $GITHUB_TOKEN" -fsSL "${@:1:$#-1}" "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/${!#}")
+        }
+
+        # delete github release
+        release_id=$(gh_api releases | jq -r ".[] | select(.name == \"$RELEASE_NAME\") | .id")
+        if [[ -n $release_id ]]; then
+           echo "Deleting release [releases/$release_id]..."
+           gh_api -X DELETE releases/$release_id
+        fi
+
+        # delete release git tag
+        tag_path="git/refs/tags/$RELEASE_NAME"
+        if gh_api -o /dev/null --head "$tag_path"; then
+           echo "Deleting tag [$tag_path]..."
+           gh_api -X DELETE "$tag_path"
+        fi
+
+    - name: "Create 'latest-${{ env.RELEASE_BRANCH }}' release"
+      if: ${{ matrix.may_create_release && github.ref_name == env.RELEASE_BRANCH && !env.ACT }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: latest-${{ env.RELEASE_BRANCH }} 
+      run: |
+        set -eux
+
+        # https://hub.github.com/hub-release.1.html
+        hub release create "$RELEASE_NAME" \
+          -t "${{ github.sha }}" \
+          --message "$RELEASE_NAME" \
+          --attach "target/more-clink-completions.lua" \
+          --attach "target/more-clink-completions.debug.lua"
+
+
+    ##################################################
+    # Setup SSH debug session
+    ##################################################
+    - name: "SSH session for debugging: check"
+      id: DEBUG_SSH_SESSSION_CHECK
+      if: always()
+      shell: bash
+      run: |
+        set -eu
+        job_filter_pattern="${{ inputs.debug-with-ssh-only-jobs-matching }}"
+        echo "job_filter: $job_filter_pattern"
+
+        job_info=$(echo "$GITHUB_JOB ${{ runner.os }} haxe-${{ matrix.haxe-version }}" | tr -d '\n')
+        echo "job_info: $job_info"
+
+        if [[ "$job_info" =~ .*$job_filter_pattern.* ]] && case "${{ job.status }}" in
+           success)   [[ "${{ inputs.debug-with-ssh }}" == always ]] ;;
+           cancelled) [[ "${{ inputs.debug-with-ssh }}" == on_failure_or_cancelled ]] ;;
+           failure)   [[ "${{ inputs.debug-with-ssh }}" =~ on_failure.* ]] ;;
+        esac; then
+           echo "start_session=true" | tee -a "$GITHUB_OUTPUT"
+        fi
+
+    - name: "SSH session for debugging: start"
+      uses: mxschmitt/action-tmate@v3 # https://github.com/mxschmitt/action-tmate
+      if: always() && steps.DEBUG_SSH_SESSSION_CHECK.outputs.start_session
+      with:
+        limit-access-to-actor: ${{ inputs.debug-with-ssh-only-for-actor }}

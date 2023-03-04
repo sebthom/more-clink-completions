@@ -1,0 +1,9 @@
+-cp src
+-D lua_ver=5.2
+-D lua_vanilla
+-D dump=pretty
+-dce full
+-lib clink-externs
+--macro nullSafety("more_clink_completions", Strict)
+-main more_clink_completions.Main
+-lua target/more-clink-completions.lua

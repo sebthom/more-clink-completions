@@ -1,0 +1,106 @@
+{
+   "emptyLines": {
+      "afterFileHeaderComment": 0,
+      "abstractEmptyLines": {
+         "afterPrivateFunctions": 0,
+         "afterPrivateVars": 0,
+         "afterStaticFunctions": 0,
+         "afterStaticVars": 0,
+         "afterVars": 0,
+         "beginType": 1,
+         "betweenFunctions": 0,
+         "betweenStaticFunctions": 0,
+         "existingBetweenFields": "keep"
+      },
+      "classEmptyLines": {
+         "afterPrivateFunctions": 0,
+         "afterPrivateVars": 0,
+         "afterStaticFunctions": 0,
+         "afterStaticVars": 0,
+         "afterVars": 0,
+         "beginType": 1,
+         "betweenFunctions": 0,
+         "betweenStaticFunctions": 0,
+         "existingBetweenFields": "keep"
+      },
+      "externClassEmptyLines": {
+         "afterPrivateFunctions": 0,
+         "afterPrivateVars": 0,
+         "afterStaticFunctions": 0,
+         "afterStaticVars": 0,
+         "afterVars": 0,
+         "beginType": 0,
+         "betweenFunctions": 0,
+         "betweenStaticFunctions": 0,
+         "existingBetweenFields": "keep"
+      },
+      "enumAbstractEmptyLines": {
+         "afterVars": 0,
+         "beginType": 0,
+         "betweenFunctions": 0,
+         "betweenVars": 0,
+         "existingBetweenFields": "keep"
+      },
+      "interfaceEmptyLines": {
+         "afterPrivateFunctions": 1,
+         "afterPrivateVars": 1,
+         "afterStaticFunctions": 1,
+         "afterStaticVars": 1,
+         "afterVars": 1,
+         "beginType": 1,
+         "betweenFunctions": 1,
+         "betweenStaticFunctions": 1,
+         "existingBetweenFields": "remove"
+      },
+      "beforeDocCommentEmptyLines": "ignore",
+      "afterLeftCurly": "keep",
+      "betweenTypes": 2,
+      "maxAnywhereInFile": 2
+   },
+   "indentation": {
+      "character": "   ",
+      "conditionalPolicy": "alignedIncrease",
+      "tabWidth": 3
+   },
+   "lineEnds": {
+      "emptyCurly": "break"
+   },
+   "sameLine": {
+      "caseBody": "keep",
+      "ifBody": "keep",
+      "functionBody": "keep"
+   },
+   "wrapping": {
+      "maxLineLength": 140,
+      "arrayWrap": {
+         "defaultWrap": "keep",
+         "rules": []
+      },
+      "callParameter": {
+         "rules": [
+            {
+               "conditions": [
+                  {
+                     "cond": "ItemCountLargerThan",
+                     "value": 2
+                  }
+               ],
+               "type": "keep"
+            }
+         ]
+      },
+      "methodChain": {
+         "rules": [
+            {
+               "conditions": [
+                  {
+                     "cond": "ItemCountLargerThan",
+                     "value": 1
+                  }
+               ],
+               "type": "keep"
+            }
+         ]
+      }
+   }
+}

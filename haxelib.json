@@ -1,0 +1,19 @@
+{
+   "name": "more-clink-completions",
+   "url": "https://github.com/sebthom/more-clink-completions",
+   "license": "MIT",
+   "classPath": "src/",
+   "tags": [
+      "lua",
+      "clink"
+   ],
+   "description": "Windows command line auto-completion functions for clink.",
+   "contributors": [
+      "sebthom"
+   ],
+   "releasenote": "Initial release",
+   "version": "2.0.0",
+   "dependencies": {
+      "haxe-clink-externs": "git:https://github.com/vegardit/haxe-clink-externs"
+   }
+}
