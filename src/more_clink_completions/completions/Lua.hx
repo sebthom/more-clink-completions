@@ -20,9 +20,9 @@ class Lua {
 
    static function registerNow(parser:ArgMatcher, commandWord:String) {
       parser //
-         .addFlag("-e", Suggest.nothing) //
+         .addFlag("-e", "") //
          .addFlag("-i")
-         .addFlag("-l", Suggest.nothing) //
+         .addFlag("-l", "") //
          .addFlag("-v")
          .addFlag("-E")
          .addArg(Suggest.filesEndingWith(".lua"));

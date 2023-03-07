@@ -39,8 +39,8 @@ class Curl {
                if (optionShort != null) parser.addFlag(optionShort);
                if (optionLong != null) parser.addFlag(optionLong);
             default: // option with unknown argument type
-               if (optionShort != null) parser.addFlag(optionShort, Suggest.nothing);
-               if (optionLong != null) parser.addFlag(optionLong, Suggest.nothing);
+               if (optionShort != null) parser.addFlag(optionShort, "");
+               if (optionLong != null) parser.addFlag(optionLong, "");
          }
       }
       parser.noFiles();

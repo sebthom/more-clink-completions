@@ -29,9 +29,9 @@ class DockerMachine {
          .addFlag("--tls-ca-key", Suggest.files)
          .addFlag("--tls-client-cert", Suggest.files)
          .addFlag("--tls-client-key", Suggest.files)
-         .addFlag("--github-api-token", Suggest.nothing)
-         .addFlag("--native-ssh", Suggest.nothing)
-         .addFlag("--bugsnag-api-token", Suggest.nothing)
+         .addFlag("--github-api-token", "")
+         .addFlag("--native-ssh", "")
+         .addFlag("--bugsnag-api-token", "")
 
          .addFlags(["-h", "--help"])
          .addFlags(["-v", "--version"])

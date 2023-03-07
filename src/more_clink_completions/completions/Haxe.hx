@@ -38,18 +38,18 @@ class Haxe {
          .addFlag("--python", Suggest.filesEndingWith(".py"))
          .addFlag("--hl", Suggest.filesEndingWith(".hl"))
          .addFlag("--interp")
-         .addFlag("--run", Suggest.nothing) //
+         .addFlag("--run", "") //
             //------------------------
             // Compilation:
             //------------------------
-         .addFlags(["-p", "--classpath"], Suggest.dirs) //
-         .addFlags(["-m", "--main"], Suggest.nothing) //
-         .addFlags(["-L", "--library"], Suggest.nothing) //
+         .addFlags(["-p", "--class-path"], Suggest.dirs) //
+         .addFlags(["-m", "--main"], "") //
+         .addFlags(["-L", "--library"], "") //
          .addFlags(["-D", "--define"], suggestDefines) //
          .addFlags(["-R", "--resources"], Suggest.files) //
-         .addFlag("--cmd", Suggest.nothing) //
-         .addFlag("--remap", Suggest.nothing) //
-         .addFlag("--macro", Suggest.nothing) //
+         .addFlag("--cmd", "") //
+         .addFlag("--remap", "") //
+         .addFlag("--macro", "") //
          .addFlags(["-C", "--cwd"], Suggest.dirs) //
          .addFlag("--haxelib-global") //
             //------------------------
@@ -81,14 +81,14 @@ class Haxe {
             //------------------------
             // Compilation Server:
             //------------------------
-         .addFlag("--server-listen", Suggest.nothing) //
-         .addFlag("--server-connect", Suggest.nothing) //
-         .addFlag("--connect", Suggest.nothing) //
+         .addFlag("--server-listen", "") //
+         .addFlag("--server-connect", "") //
+         .addFlag("--connect", "") //
             //------------------------
             // Target-specific:
             //------------------------
-         .addFlag("--swf-version", Suggest.nothing) //
-         .addFlag("--swf-header", Suggest.nothing) //
+         .addFlag("--swf-version", "") //
+         .addFlag("--swf-header", "") //
          .addFlag("--flash-strict") //
          .addFlag("--swf-lib", Suggest.filesEndingWith(".swf"))
          .addFlag("--swf-lib-extern", Suggest.filesEndingWith(".swf"))
@@ -96,7 +96,7 @@ class Haxe {
          .addFlag("--jar-lib-extern", Suggest.filesEndingWith(".jar"))
          .addFlag("--net-lib", Suggest.filesEndingWith(".dll"))
          .addFlag("--net-std", Suggest.filesEndingWith(".dll"))
-         .addFlag("--c-arg", Suggest.nothing) //
+         .addFlag("--c-arg", "") //
             //------------------------
             // Miscellaneous:
             //------------------------

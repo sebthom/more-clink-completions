@@ -22,9 +22,9 @@ class Java {
          .addFlags(["-p", "--module-path", "--upgrade-module-path"], Suggest.dirs) //
             //
          .addFlag("--add-modules", ["ALL-DEFAULT", "ALL-SYSTEM", "ALL-MODULE-PATH"])
-         .addFlag("--enable-native-access", Suggest.nothing) //
+         .addFlag("--enable-native-access", "") //
          .addFlag("--list-modules")
-         .addFlags(["-d", "--describe-module", "--upgrade-module-path"], Suggest.nothing) //
+         .addFlags(["-d", "--describe-module", "--upgrade-module-path"], "") //
             //
          .addFlag("--dry-run")
          .addFlag("--validate-modules") //
@@ -56,6 +56,6 @@ class Java {
          .addFlag("--enable-preview")
             //
          .addFlag("-jar", Suggest.filesEndingWith(".jar"))
-         .addFlags(["-m", "--module"], Suggest.nothing);
+         .addFlags(["-m", "--module"], "");
    }
 }

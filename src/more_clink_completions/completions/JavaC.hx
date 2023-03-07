@@ -28,7 +28,7 @@ class JavaC {
          .addFlag("-d", Suggest.dirs) //
          .addFlag("-deprecation")
          .addFlag("-enable-preview")
-         .addFlag("encoding", Suggest.nothing)
+         .addFlag("encoding", "")
          .addFlag("-endorseddirs", Suggest.dirs)
          .addFlag("-extdirs", Suggest.dirs)
             //
@@ -51,12 +51,12 @@ class JavaC {
             //
             // -J<flag>
             //
-         .addFlag("--limit-modules", Suggest.nothing) //
-         .addFlags(["-m", "--module"], Suggest.nothing) //
+         .addFlag("--limit-modules", "") //
+         .addFlags(["-m", "--module"], "") //
             //
          .addFlags(["-p", "--module-path"], Suggest.dirs) //
          .addFlag("--module-source-path", Suggest.dirs) //
-         .addFlag("--module-version", Suggest.nothing) //
+         .addFlag("--module-version", "") //
             //
          .addFlag("-nowarn")
          .addFlag("-parameters") //
@@ -64,11 +64,11 @@ class JavaC {
          .addFlag("-proc:none")
          .addFlag("-proc:only") //
             //
-         .addFlag("-processor", Suggest.nothing) //
+         .addFlag("-processor", "") //
          .addFlag("--processor-module-path", Suggest.dirs) //
          .addFlags(["-processorpath", "--processor-path"], Suggest.dirs) //
             //
-         .addFlag("-profile", Suggest.nothing) //
+         .addFlag("-profile", "") //
          .addFlag("--release", Suggest.range(7, 17)) //
          .addFlag("-s", Suggest.dirs) //
          .addFlags(["-source", "--source"], Suggest.range(7, 17)) //

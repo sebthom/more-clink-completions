@@ -27,7 +27,7 @@ class Docker {
          .addFlag("--config", Suggest.dirs)
          .addFlags(["-c", "--context"], Suggest.dirs)
          .addFlags(["-D", "--debug"])
-         .addFlags(["-H", "--hosts"], Suggest.nothing)
+         .addFlags(["-H", "--hosts"], "")
          .addFlags(["-l", "--log-level"], ["debug", "info", "warn", "error", "fatal"])
 
          .addFlag("-tls")
