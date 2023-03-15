@@ -17,7 +17,7 @@ using clink.util.Strings;
 class Dart {
 
    public static function register() {
-      Clink.argMatcher("dart") .setDelayedInitializer(registerNow);
+      Clink.argMatcher("dart").setDelayedInitializer(registerNow);
    }
 
    static function registerNow(parser:ArgMatcher, commandWord:String) {
@@ -54,26 +54,31 @@ class Dart {
    }
 
    static function suggestMainCommands():LuaArray<String> {
-      var commands = COMMANDS_CACHE[""];
-      if (commands == null) {
-         commands = extractCommandsFromHelp("dart --help", "Available commands:");
-         if (commands.length() > 0) {
-            COMMANDS_CACHE[""] = commands;
+      var mainCommands = COMMANDS_CACHE[""];
+      if (mainCommands == null) {
+         mainCommands = extractCommandsFromHelp("dart --help", "Available commands:");
+         if (mainCommands.length() > 0) {
+            COMMANDS_CACHE[""] = mainCommands;
          }
       }
-      return commands;
+      return mainCommands;
    }
 
    static function suggestSubCommands(word:String, wordIndex:Int, lineState:LineState):LuaArray<String> {
+      suggestMainCommands(); // trigger cache population
+
       var mainCommand = lineState.getWord(wordIndex - 1);
-      var commands = COMMANDS_CACHE[mainCommand];
-      if (commands == null) {
-         commands = extractCommandsFromHelp('dart ${mainCommand} --help', "Available subcommands:");
-         if (commands.length() > 0) {
-            COMMANDS_CACHE[mainCommand] = commands;
+      if (@:nullSafety(Off) !COMMANDS_CACHE[""].contains(mainCommand)) {
+         return [];
+      }
+
+      var subCommands = COMMANDS_CACHE[mainCommand];
+      if (subCommands == null) {
+         subCommands = extractCommandsFromHelp('dart ${mainCommand} --help', "Available subcommands:");
+         if (subCommands.length() > 0) {
+            COMMANDS_CACHE[mainCommand] = subCommands;
          }
       }
-      return commands;
+      return subCommands;
    }
-
 }
