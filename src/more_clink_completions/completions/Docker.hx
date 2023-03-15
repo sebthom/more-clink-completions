@@ -66,26 +66,32 @@ class Docker {
    }
 
    static function suggestMainCommands():LuaArray<String> {
-      var commands = COMMANDS_CACHE[""];
-      if (commands == null) {
-         commands = extractCommandsFromHelp("docker --help");
-         if (commands.length() > 0) {
-            COMMANDS_CACHE[""] = commands;
+      var mainCommands = COMMANDS_CACHE[""];
+      if (mainCommands == null) {
+         mainCommands = extractCommandsFromHelp("docker --help");
+         if (mainCommands.length() > 0) {
+            COMMANDS_CACHE[""] = mainCommands;
          }
       }
-      return commands;
+      return mainCommands;
    }
 
    static function suggestSubCommands(word:String, wordIndex:Int, lineState:LineState):LuaArray<String> {
-      var mainCommand = lineState.getWord(wordIndex - 1);
-      var commands = COMMANDS_CACHE[mainCommand];
-      if (commands == null) {
-         commands = extractCommandsFromHelp('docker ${mainCommand} --help');
-         if (commands.length() > 0) {
-            COMMANDS_CACHE[mainCommand] = commands;
+      suggestMainCommands(); // trigger cache population
+
+      final mainCommand = lineState.getWord(wordIndex - 1);
+      if (@:nullSafety(Off) !COMMANDS_CACHE[""].contains(mainCommand)) {
+         return [];
+      }
+
+      var subCommands = COMMANDS_CACHE[mainCommand];
+      if (subCommands == null) {
+         subCommands = extractCommandsFromHelp('docker ${mainCommand} --help');
+         if (subCommands.length() > 0) {
+            COMMANDS_CACHE[mainCommand] = subCommands;
          }
       }
-      return commands;
+      return subCommands;
    }
 
    static function colorizeCommands(argIndex:Int, word:String, wordIndex:Int, lineState:LineState, classifications:WordClassifications) {
@@ -99,5 +105,4 @@ class Docker {
          }
       }
    }
-
 }
