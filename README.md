@@ -17,6 +17,7 @@ This repository contains Windows command line auto-completion functions to be us
 The completions are programmed in the strictly typed programming language [Haxe](https://haxe.org) and transpiled to [Lua](https://www.lua.org/).
 
 Currently completions for the following commands are available:
+- [Act.hx](src/more_clink_completions/completions/Act.hx) for `act` command - [nektos/act](https://github.com/nektos/act) local GitHub actions runner.
 - [Curl.hx](src/more_clink_completions/completions/Curl.hx) for `curl` command - [cURL](https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409) HTTP command line client
 - [Dart.hx](src/more_clink_completions/completions/Dart.hx) for `dart` command - [Dart](https://dart.dev/) compiler
 - [Docker.hx](src/more_clink_completions/completions/Docker.hx) for `docker` command - [Docker](https://docs.docker.com/engine/reference/commandline/cli/) command line client
