@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/sebthom/more-clink-completions/workflows/Build/badge.svg "GitHub Actions")](https://github.com/sebthom/more-clink-completions/actions?query=workflow%3A%22Build%22)
 [![License](https://img.shields.io/github/license/sebthom/more-clink-completions.svg?color=blue)](LICENSE.txt)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
 **Contributions are highly welcome!**
 
