@@ -50,9 +50,9 @@ Install clink according to https://chrisant996.github.io/clink/clink.html#usage,
 
 1. Using git
     1. Open a Windows command prompt
-    1. Git clone the [v2-release](https://github.com/sebthom/more-clink-completions/tree/v2-releases) branch, .e.g
+    1. Git clone the [v2-releases](https://github.com/sebthom/more-clink-completions/tree/v2-releases) branch, .e.g
        ```batch
-       git clone https://github.com/sebthom/more-clink-completions --branch v2-release --single-branch [REPO_PATH]
+       git clone https://github.com/sebthom/more-clink-completions --branch v2-releases --single-branch [REPO_PATH]
        ```
     1. Run
        ```batch
