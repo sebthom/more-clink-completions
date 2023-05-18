@@ -74,10 +74,7 @@ class Dart {
 
       var subCommands = COMMANDS_CACHE[mainCommand];
       if (subCommands == null) {
-         subCommands = extractCommandsFromHelp('dart ${mainCommand} --help', "Available subcommands:");
-         if (subCommands.length() > 0) {
-            COMMANDS_CACHE[mainCommand] = subCommands;
-         }
+         subCommands = COMMANDS_CACHE[mainCommand] = extractCommandsFromHelp('dart ${mainCommand} --help', "Available subcommands:");
       }
       return subCommands;
    }

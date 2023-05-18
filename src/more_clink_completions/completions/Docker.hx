@@ -6,7 +6,6 @@
  */
 package more_clink_completions.completions;
 
-import haxe.ds.ReadOnlyArray;
 import clink.util.Suggest;
 import clink.api.LineState;
 import clink.util.LuaArray;
@@ -87,10 +86,7 @@ class Docker {
 
       var subCommands = COMMANDS_CACHE[mainCommand];
       if (subCommands == null) {
-         subCommands = extractCommandsFromHelp('docker ${mainCommand} --help');
-         if (subCommands.length() > 0) {
-            COMMANDS_CACHE[mainCommand] = subCommands;
-         }
+         subCommands = COMMANDS_CACHE[mainCommand] = extractCommandsFromHelp('docker ${mainCommand} --help');
       }
       return subCommands;
    }
