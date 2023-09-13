@@ -89,7 +89,7 @@ jobs:
         lua tools/luapack-*/luapack.lua target/more-clink-completions.lua
 
         # Add version info
-        git_log=$(git log ${{ github.ref_name }} --pretty=format:"%H%d %aI %s" -1)
+        git_log=$(git log ${{ github.sha }} --pretty=format:"%H%d %aI %s")
         prefix="-- $git_log
         -- SPDX-FileCopyrightText: © Sebastian Thomschke and contributors
         -- SPDX-License-Identifier: MIT
