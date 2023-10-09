@@ -149,41 +149,23 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: latest-${{ env.RELEASE_BRANCH }} 
-      run: |
-        set -eu
-
-        function gh_api() {
-          (set -x; curl -H "Authorization: token $GITHUB_TOKEN" -fsSL "${@:1:$#-1}" "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/${!#}")
-        }
-
-        # delete github release
-        release_id=$(gh_api releases | jq -r ".[] | select(.name == \"$RELEASE_NAME\") | .id")
-        if [[ -n $release_id ]]; then
-           echo "Deleting release [releases/$release_id]..."
-           gh_api -X DELETE releases/$release_id
-        fi
-
-        # delete release git tag
-        tag_path="git/refs/tags/$RELEASE_NAME"
-        if gh_api -o /dev/null --head "$tag_path"; then
-           echo "Deleting tag [$tag_path]..."
-           gh_api -X DELETE "$tag_path"
-        fi
+      # https://cli.github.com/manual/gh_release_delete
+      run: gh release delete "$RELEASE_NAME" --yes --cleanup-tag || true
 
     - name: "Create 'latest-${{ env.RELEASE_BRANCH }}' release"
       if: ${{ matrix.may_create_release && github.ref_name == env.RELEASE_BRANCH && !env.ACT }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_NAME: latest-${{ env.RELEASE_BRANCH }} 
+        RELEASE_NAME: latest-${{ env.RELEASE_BRANCH }}
+      # https://cli.github.com/manual/gh_release_create
       run: |
-        set -eux
-
-        # https://hub.github.com/hub-release.1.html
-        hub release create "$RELEASE_NAME" \
-          -t "${{ github.sha }}" \
-          --message "$RELEASE_NAME" \
-          --attach "target/more-clink-completions.lua" \
-          --attach "target/more-clink-completions.debug.lua"
+        gh release create "$RELEASE_NAME" \
+          --latest \
+          --prerelease \
+          --target "${{ github.sha }}" \
+          --notes "$RELEASE_NAME" \
+          target/more-clink-completions.lua \
+          target/more-clink-completions.debug.lua
 
 
     ##################################################
