@@ -26,7 +26,7 @@ class ArduinoCli {
    static function init(parser:ArgMatcher, command:String) {
       // Older CLI versions localize help using the locale configuration key.
       // Scope the environment override to the child shell (no user config writes).
-      final lines = Utils.exec('set "ARDUINO_LOCALE=en" & 2>nul arduino-cli $command --help');
+      final lines = Utils.exec('set "ARDUINO_LOCALE=en" & 2>nul arduino-cli.exe $command --help');
       final commands = new Array<ArgWithChoices>();
       var section = "";
       for (line in lines) {

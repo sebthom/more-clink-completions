@@ -18,8 +18,8 @@ This repository contains Windows command line auto-completion functions to be us
 The completions are programmed in the strictly typed programming language [Haxe](https://haxe.org) and transpiled to [Lua](https://www.lua.org/).
 
 Currently completions for the following commands are available:
-- [ArduinoCli.hx](src/more_clink_completions/completions/ArduinoCli.hx) for `arduino-cli` - commands and flags discovered lazily from the installed CLI's help, with file/directory completion for common path options. Reload Clink after upgrading the CLI. Board IDs and library names are not dynamically completed.
 - [Act.hx](src/more_clink_completions/completions/Act.hx) for `act` command - [nektos/act](https://github.com/nektos/act) local GitHub actions runner.
+- [ArduinoCli.hx](src/more_clink_completions/completions/ArduinoCli.hx) for `arduino-cli` command - [Arduino CLI](https://github.com/arduino/arduino-cli) command line tool.
 - [Curl.hx](src/more_clink_completions/completions/Curl.hx) for `curl` command - [cURL](https://techcommunity.microsoft.com/t5/containers/tar-and-curl-come-to-windows/ba-p/382409) HTTP command line client
 - [Dart.hx](src/more_clink_completions/completions/Dart.hx) for `dart` command - [Dart](https://dart.dev/) compiler
 - [Docker.hx](src/more_clink_completions/completions/Docker.hx) for `docker` command - [Docker](https://docs.docker.com/engine/reference/commandline/cli/) command line client
@@ -32,12 +32,6 @@ Currently completions for the following commands are available:
 - [OpenSSL.hx](src/more_clink_completions/completions/OpenSSL.hx) for `openssl` command - [OpenSSL](https://github.com/openssl/openssl) command line tool
 
 You need other completions? Try https://github.com/vladimir-kotikov/clink-completions
-
-To check Arduino CLI completions after building with `haxe build.hxml`, run
-`clink lua tests/arduino-cli.lua` from this repository with `arduino-cli` on PATH.
-This exercises the generated Lua against real CLI help using a recording matcher.
-For an interactive check, load the generated script in Clink and try
-`arduino-cli core ins<Tab>` and `arduino-cli compile --build-path <Tab>`.
 
 You want to create your own completions ...
 - using [Lua](https://www.lua.org/)? Read https://chrisant996.github.io/clink/clink.html#extending-clink
